@@ -2,8 +2,7 @@ SLURM Quickstart Guide
 ==
 The [*SLURM*][1] is an open source, fault-tolerant, and highly scalable cluster management and job scheduling system for Linux clusters.
 
-This quickstart guide will help you get a SLURM cluster up in running quicker than any other guide. This expounds on the [SLURM quickstart guide][2].
-
+This quickstart guide will help you get a SLURM 16.05.9 cluster up and running quicker than any other guide. This expounds on the [SLURM quickstart guide][2].
 
 # Requirements
 
@@ -12,13 +11,13 @@ This quickstart guide will help you get a SLURM cluster up in running quicker th
 * SSH capability (with X11 forwarding and server if possible; I use [MobaXterm][7] on Windows)
 
 * How to use vim a bit
-    - i for insert
-    - esc to exit insert mode
-    - x to delete a single character
-    - :wq to save and quit
-    - :q to quit without save
-    - u to undo
-    - Arrow keys/hjkl to move
+    - `i` for insert
+    - `esc` to exit insert mode
+    - `x` to delete a single character
+    - `:wq` to save and quit
+    - `:q` to quit without save
+    - `u` to undo
+    - Arrow keys/`hjkl` to move cursor
 
 # Create a Debian Droplet
 
@@ -73,7 +72,7 @@ Make sure you are on the `debian-1` droplet as `root`.
 
 If you try to run the `slurmctld` command to start SLURM, it will complain that there is no file at `/etc/slurm-llnl/slurm.conf`. So you need to create it.
 
-If you want to use the slurm html conf generator, see the [Configurator](#configurator) section. Otherwise, use the template provided in this repo as follows:
+If you want to use the SLURM html conf generator, see the [Configurator](#configurator) section. Otherwise, use the template provided in this repo as follows:
 
 Download a copy of the template `slurm.conf` file:
 
@@ -121,7 +120,6 @@ In your separate `debian-2` terminal, start the compute node:
     slurmd
 
 Type `sinfo` and you should see two nodes!
-
 
 # Trying out SLURM
 
@@ -181,7 +179,6 @@ This will not print out the hostname of the your computer, but of the node that 
 
 To deallocate the node allocated by `salloc`, simply run the `scancel` command on the allocated job.
 
-
 # Starting slurmctld and slurmd on boot
 
 To start SLURM on boot, you need to enable `slurmctld` and `slurmd` as services with `systemd` via the `systemctl` command:
@@ -204,7 +201,6 @@ However, if you are adding or removing nodes to the cluster, you will need to re
 To kill it, run `top`, find the `slurmctld` process, and press `k`. Input the process ID, and then enter either `15`, or if that doesn't kill it, `9`.
 
 To start it again, simply run the `slurmctld` command. Check to make sure the cluster changed by running `sinfo`.
-
 
 # Configuring Users and Groups
 
@@ -243,7 +239,6 @@ Note that the SLURM Debian package automatically created the `slurm` and `munge`
 
 You are now ready to duplicate the droplet. [Jump to Duplicate the Droplet](#duplicate-the-droplet)
 
-
 # Configurator
 
 The `xauth` package should already be installed. This is needed to have the Firefox GUI forwarded properly over SSH via X11. However, you need to restart the server and log in again for `xauth` to take effect.
@@ -254,12 +249,11 @@ Now you can run the configurator html page in Firefox:
 
     firefox /usr/share/doc/slurmctld/slurm-wlm-configurator.easy.html &
 
-Right click and save the page. Save it as a *text file*, not as a complete web page. Save it to `/etc/slurm-llnl/slurm.conf`.
+In Firefox, fill out the relevant required fields. Right click and save the page. Save it as a *text file*, not as a complete web page. Save it to `/etc/slurm-llnl/slurm.conf`.
 
-Comment or remove the last line in the file that contains `MaxTime`, so `slurmctld` can start without error.
+Comment or remove the last line of the file (which contains `MaxTime`). This is so `slurmctld` can start without error.
 
 You are now ready to start SLURM. [Jump to Starting SLURM](#starting-slurm)
-
 
 [1]: https://slurm.schedmd.com/ "SLURM"
 [2]: https://slurm.schedmd.com/quickstart_admin.html "Quickstart"
