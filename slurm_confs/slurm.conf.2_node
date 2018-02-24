@@ -2,7 +2,7 @@
 # Put this file on all nodes of your cluster.
 # See the slurm.conf man page for more information.
 #
-ControlMachine=debian-research-1
+ControlMachine=debian-1
 ControlAddr=<TODO: INSERT IP ADDRESS>
 #
 #MailProg=/bin/mail
@@ -48,7 +48,7 @@ SlurmdLogFile=/var/log/slurm-llnl/slurmd.log
 #
 #
 # COMPUTE NODES
-NodeName=debian-research-1 NodeAddr=<TODO: INSERT IP ADDRESS> CPUs=1 State=UNKNOWN
-NodeName=debian-research-2 NodeAddr=<TODO: INSERT IP ADDRESS> CPUs=1 State=UNKNOWN
-PartitionName=testing Nodes=debian-research-1,debian-research-2 Default=YES
+NodeName=debian-1 NodeAddr=<TODO: INSERT IP ADDRESS> CPUs=1 State=UNKNOWN
+NodeName=debian-2 NodeAddr=<TODO: INSERT IP ADDRESS> CPUs=1 State=UNKNOWN
+PartitionName=testing Nodes=debian-1,debian-2 Default=YES
 #MaxTime=UNLIMITED State=UP
