@@ -12,13 +12,13 @@ This quickstart guide will help you get a SLURM cluster up in running quicker th
 * SSH capability (with X11 forwarding and server if possible; I use [MobaXterm][7] on Windows)
 
 * How to use vim a bit
-    ** i for insert
-    ** esc to exit insert mode
-    ** x to delete a single character
-    ** :wq to save and quit
-    ** :q to quit without save
-    ** u to undo
-    ** Arrow keys/hjkl to move
+    - i for insert
+    - esc to exit insert mode
+    - x to delete a single character
+    - :wq to save and quit
+    - :q to quit without save
+    - u to undo
+    - Arrow keys/hjkl to move
 
 # Create a Debian Droplet
 
@@ -59,9 +59,9 @@ Now create users other than `root`. See [Configuring Users and Groups](#configur
 
 At this point, you want to duplicate your newly-configured Debian droplet.
 
-In [Digital Ocean][6], click the `Images` tab and then the `Snapshots` tab. Select the `debian-1` droplet you just created. Name it `debian-2` and click `Take Snapshot`.
+In [Digital Ocean][6], click the `Images` tab and then the `Snapshots` tab. Select the `debian-1` droplet you just created. Click `Take Snapshot`.
 
-Once the snapshot is complete, create another droplet like before, except during the `Choose an Image` part, select the newly-created snapshot.
+Once the snapshot is complete, create another droplet like before, except during the `Choose an image` section, select the newly-created snapshot under the `Snapshots` tab.
 
 In a separate terminal, SSH into `debian-2` as `root` and update your password.
 
@@ -81,15 +81,15 @@ Download a copy of the template `slurm.conf` file:
     git clone https://github.com/hintron/slurm_quickstart
     cp slurm_quickstart/slurm_confs/slurm.conf.2_node slurm.conf
 
-In `slurm.conf`, you need to insert the IP addresses of your SLURM nodes. Replace `<TODO: INSERT IP ADDRESS>` with the IP address of the corresponding droplets in Digital Ocean. If you named the droplets something different than`debian-1` and `debian-2`, change them as well.
+In `slurm.conf`, you need to insert the IP addresses of your SLURM nodes. Replace `<TODO: INSERT IP ADDRESS>` with the IP address of the corresponding droplets in Digital Ocean. If you named the droplets something different than `debian-1` and `debian-2`, change them as well:
 
     vim slurm.conf
 
-Now it is ready to be installed in the proper location:
+Now `slurm.conf` is ready to be installed in its proper location:
 
     mv slurm.conf /etc/slurm-llnl/
 
-Note that this conf file specifies a partition called `testing` that has two compute (`slurmd`) nodes: `debian-1` and `debian-2`. `debian-1`will act as both `slurmctld` and a `slurmd`.
+Note that this conf file specifies a partition called `testing` that has two compute (`slurmd`) nodes: `debian-1` and `debian-2`. `debian-1` will act as both `slurmctld` and a `slurmd`.
 
 # Starting SLURM
 
@@ -114,7 +114,7 @@ So send `slurm.conf` from `debian-1` to `debian-2`:
 
     scp /etc/slurm-llnl/slurm.conf root@111.111.111.111:/etc/slurm-llnl/
 
-Make sure to supply the correct IP address for `debian-2`.
+Make sure to replace `111.111.111.111` with the actual IP address for `debian-2`.
 
 In your separate `debian-2` terminal, start the compute node:
 
@@ -129,23 +129,23 @@ On `debian-1`, switch to your preferred sudo user:
 
     su hintron
 
-Now let's get a bash script to test out SLURM with:
+Now let's get a bash script ready for testing out SLURM:
 
     cd ~
     sudo cp /root/slurm_quickstart/scripts/x_seconds.sh .
     chmod 755 x_seconds.sh
 
-Let's run the script a few times on SLURM!
+Let's try running the script a few times on SLURM!
 
     sbatch ./x_seconds.sh 60 5
     sbatch ./x_seconds.sh 60 5
     sbatch ./x_seconds.sh 60 5
 
-These will each run for 60 seconds, to give us time to see them run.
+Each script invocation will run for 60 seconds total while printing out a timestamp every 5 seconds.
 
 To see the jobs you just scheduled:
 
-    squeue # add -u <username> to filter by <username>
+    squeue
 
 You should see 3 jobs, with two of them running, one on each node. Success!
 
@@ -153,17 +153,19 @@ To see the stats on the jobs:
 
     scontrol show job
 
-You will see that the output of the script is printed to ~/slurm-<JOBID>.out for the user that submitted it on the node that it was run on. The output will show the host name of the node the script was run on, and what user it was run under.
+You will see that the output of the script is printed to `~/slurm-<JOBID>.out` for the user that submitted it on the node that it was run on.
 
 To cancel any pending or running jobs:
 
     scancel <JOBID>
 
-Congratulations! You now have a basic SLURM cluster that you can schedule jobs to! Hopefully you know enough to be dangerous.
+Congratulations! You now have a basic SLURM cluster that you can schedule jobs to! You now know enough to be dangerous.
 
 For more information on SLURM commands and use cases, visit [Quick Start User Guide][3].
 
 Also, read the man pages (e.g. `man slurm` or `man slurm.conf`). They are actually quite informative.
+
+Here is a [simple 8-minute introduction video on how to use SLURM][8].
 
 # More SLURM Commands
 
@@ -177,6 +179,9 @@ Then, execute a command using the srun command. e.g.
 
 This will not print out the hostname of the your computer, but of the node that was allocated to you.
 
+To deallocate the node allocated by `salloc`, simply run the `scancel` command on the allocated job.
+
+
 # Starting slurmctld and slurmd on boot
 
 To start SLURM on boot, you need to enable `slurmctld` and `slurmd` as services with `systemd` via the `systemctl` command:
@@ -188,7 +193,7 @@ See [How To Use Systemctl to Manage Systemd Services and Units][5].
 
 # Rebooting slurmctld and slurmd after changing slurm.conf
 
-Many changes you make to slurm.conf will not require you to restart any of the SLURM daemons. Simply run
+Many changes you make to `slurm.conf` will not require you to restart any of the SLURM daemons. Simply run
 
     scontrol reconfigure
 
@@ -196,12 +201,13 @@ See `man scontrol` and look for reconfigure for more information.
 
 However, if you are adding or removing nodes to the cluster, you will need to restart `slurmctld`.
 
-To kill it, run `top`, find the `slurmctld` process, and press k. Input the process ID, and then type either 15, or if that doesn't kill it, 9.
+To kill it, run `top`, find the `slurmctld` process, and press `k`. Input the process ID, and then enter either `15`, or if that doesn't kill it, `9`.
 
 To start it again, simply run the `slurmctld` command. Check to make sure the cluster changed by running `sinfo`.
 
 
 # Configuring Users and Groups
+
 To create users, do:
 
     adduser hintron
@@ -262,4 +268,5 @@ You are now ready to start SLURM. [Jump to Starting SLURM](#starting-slurm)
 [5]: https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units "How To Use Systemctl to Manage Systemd Services and Units"
 [6]: https://cloud.digitalocean.com/ "Digital Ocean Dashboard"
 [7]: https://mobaxterm.mobatek.net/ "MobaXterm"
+[8]: https://youtu.be/U42qlYkzP9k "Introduction to SLURM Tools"
 [9]: https://www.debian.org/ "Debian"
