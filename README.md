@@ -175,7 +175,7 @@ Then, execute a command using the srun command. e.g.
 
     srun hostname
 
-This will not print out the hostname of the your computer, but of the node that was allocated to you.
+This will not print out the hostname of your computer, but rather of the node that was allocated to you.
 
 To deallocate the node allocated by `salloc`, simply run the `scancel` command on the allocated job.
 
@@ -194,7 +194,7 @@ Many changes you make to `slurm.conf` will not require you to restart any of the
 
     scontrol reconfigure
 
-See `man scontrol` and look for reconfigure for more information.
+See `man scontrol` and look for `reconfigure` for more information.
 
 However, if you are adding or removing nodes to the cluster, you will need to restart `slurmctld`.
 
