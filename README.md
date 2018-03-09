@@ -1,6 +1,6 @@
 SLURM Quickstart Guide
 ==
-The [*SLURM*][1] is an open source, fault-tolerant, and highly scalable cluster management and job scheduling system for Linux clusters.
+[*SLURM*][1] is an open source, fault-tolerant, and highly scalable cluster management and job scheduling system for Linux clusters.
 
 This quickstart guide will help you get a SLURM 16.05.9 cluster up and running quicker than any other guide. This expounds on the [SLURM quickstart guide][2].
 
@@ -10,7 +10,7 @@ This quickstart guide will help you get a SLURM 16.05.9 cluster up and running q
 
 * SSH capability (with X11 forwarding and server if possible; I use [MobaXterm][7] on Windows)
 
-* How to use vim a bit
+* How to use vim
     - `i` for insert
     - `esc` to exit insert mode
     - `x` to delete a single character
